@@ -1,0 +1,38 @@
+msgid "I18N Manager"
+msgstr "多语言管理"
+
+msgid "Settings"
+msgstr "设置"
+
+msgid "Language"
+msgstr "语言"
+
+msgid "Language Code"
+msgstr "语言代码"
+
+msgid "Language Name"
+msgstr "语言名称"
+
+msgid "Action"
+msgstr "操作"
+
+msgid "Action Success"
+msgstr "操作成功"
+
+msgid "Update JSON"
+msgstr "更新JSON"
+
+msgid "Update All Language"
+msgstr "更新所有语言"
+
+msgid "Download"
+msgstr "下载"
+
+msgid "Update"
+msgstr "更新"
+
+msgid "Enabled"
+msgstr "启动"
+
+msgid "Disabled"
+msgstr "禁用"

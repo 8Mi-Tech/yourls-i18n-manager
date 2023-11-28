@@ -1,0 +1,17 @@
+[
+    {
+        "code":"zh_CN",
+        "nickname": "简体中文",
+        "url":"https://github.com/taozhiyu/yourls-translation-zh_CN/raw/main/zh_CN.mo"
+    },
+    {
+        "code":"en_US",
+        "nickname": "English (US)",
+        "url":""
+    },
+    {
+        "code":"zh_TW",
+        "nickname": "繁體中文",
+        "url":"https://github.com/alexclassroom/YOURLS-zh_TW/raw/main/zh_TW.mo"
+    }
+]

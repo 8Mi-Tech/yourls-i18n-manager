@@ -1,2 +1,4 @@
-# yourls-i18n-manager
-一个适用于YOURLS的多语言开关系统，且适配原先的语言规则
+# I18N Manager for YOURLS
+- A multi-language switching system for YOURLS, adapted to the original language rules.
+- Requires [YOURLS](https://yourls.org) `1.91` and above.
+- [view Wiki](https://github.com/8Mi-Tech/yourls-i18n-manager/wiki)
