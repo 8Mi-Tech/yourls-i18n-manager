@@ -54,7 +54,7 @@ HTML;
                 $response = array('success' => true, 'message' => yourls__( 'Action Failure, Please refresh the page and try again' ,'i18n_manager'));
             }
             echo json_encode($response);  // 输出 JSON 数据
-            exit;  // 终止脚本执行，确保只返回 JSON 数据
+           
         }
 
         function _curl_getfile($type,$url,$finename=null){
@@ -64,7 +64,6 @@ HTML;
             curl_setopt($ch, CURLOPT_MAXREDIRS, 10);  // 设置最大重定向次数
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);  // 启用重定向跟随
             curl_setopt($ch, CURLOPT_AUTOREFERER, true);  // 设置为 true 以自动设置 Referer 头
-            
             $fileContent = curl_exec( $ch ); // 执行 cURL 请求并获取响应
             // 检查是否有错误发生
             if ( curl_errno( $ch ) ) {
@@ -134,15 +133,13 @@ HTML;
                 echo json_encode(array('success' => true, 'message' => yourls__( 'Update All Language Complete' ,'i18n_manager').', '.yourls__( 'Success' ,'i18n_manager').': '.$count_success.' '.yourls__( 'Error' ,'i18n_manager').': '.$count_failure, "refresh" => true));
             } else {
                 echo json_encode(_curl_getfile('download', $_POST[ 'url'], $_POST['download']));  // 输出 JSON 数据
-            }
-            exit;  // 终止脚本执行，确保只返回 JSON 数据
-            
+            }            
         }
 
         if ( isset( $_POST[ 'update-json' ] )){
-            _curl_getfile('update-json', 'https://github.com/8Mi-Tech/yourls-i18n-manager/raw/main/languages.json');
+            echo json_encode(_curl_getfile('update-json', 'https://github.com/8Mi-Tech/yourls-i18n-manager/raw/main/languages.json'));
         }
-        
+        exit;  // 终止脚本执行，确保只返回 JSON 数据
     }
     
 }
