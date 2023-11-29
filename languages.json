@@ -14,7 +14,7 @@
         "repo-url":"https://github.com/alexclassroom/YOURLS-zh_TW"
     },
     {
-        "code":"ru_RU",
+        "code":"ru",
         "nickname": "Русский",
         "url":"https://github.com/nsauk/YOURLS-ru_RU/raw/master/ru_RU.mo",
         "author":"nsauk",
