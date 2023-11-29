@@ -21,7 +21,7 @@
         "repo-url":"https://github.com/nsauk/YOURLS-ru_RU"
     },
     {
-        "code":"es_ES",
+        "code":"es",
         "nickname": "español",
         "url":"https://github.com/kralizeck/YOURLS-es_ES/raw/master/es_ES.mo",
         "author":"kralizeck",
