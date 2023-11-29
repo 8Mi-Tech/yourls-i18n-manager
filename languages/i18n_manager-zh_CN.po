@@ -57,3 +57,6 @@ msgstr "成功"
 
 msgid "Error"
 msgstr "错误"
+
+msgid "Your Browser language"
+msgstr "你的浏览器语言"

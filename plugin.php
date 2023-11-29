@@ -208,7 +208,7 @@ function i18n_manager_html() {
         display: inline;
     }
     </style>
-    <h3>{$title}</h3>
+    <h2>{$title}</h2>
     <table class = 'form-table'>
     <tr>
     <th>{$lang_lc}</th>
@@ -256,17 +256,11 @@ HTML;
         
         echo '</td></tr>';
     }
-    
-    // 输出表格的闭合标签
-    echo '</table>';
-
-
-    if ( isset( $_POST[ 'nonce' ] ) && yourls_verify_nonce( 'i18n-manager' ) ) {
-        if ( isset( $_POST[ 'download' ] ) ) {
-            // JSON
-            $data = json_decode( file_get_contents( dirname( __FILE__ ).'/languages.json' ), true );
-        }
-    }
-
+    $browserLang=yourls_get_locale();
+    $lang_tip_browserlang=yourls__( 'Your Browser language', 'i18n_manager' );
+    echo <<< HTML
+    </table>
+    <p>{$lang_tip_browserlang}: {$browserLang}
+HTML;
 }
 ?>
