@@ -166,7 +166,7 @@ function i18n_manager_html() {
     }
     $lang_lc=yourls__( 'Language Code', 'i18n_manager' );
     $lang_ln=yourls__( 'Language Name', 'i18n_manager' );
-    $lang_author=yourls__( 'Author', 'i18n_manager' );
+    $lang_author=yourls__( 'Authors', 'i18n_manager' );
     $lang_ac=yourls__( 'Action', 'i18n_manager' );
     $lang_update_json=yourls__( 'Update JSON', 'i18n_manager');
     $lang_update_all_lang=yourls__( 'Update All Language', 'i18n_manager');
