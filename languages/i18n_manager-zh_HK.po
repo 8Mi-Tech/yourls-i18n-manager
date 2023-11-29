@@ -1,0 +1,65 @@
+msgid "I18N Manager"
+msgstr "多語言管理"
+
+msgid "Settings"
+msgstr "設置"
+
+msgid "Language"
+msgstr "語言"
+
+msgid "Language Code"
+msgstr "語言代碼"
+
+msgid "Language Name"
+msgstr "語言名稱"
+
+msgid "Action"
+msgstr "操作"
+
+msgid "Action Success"
+msgstr "操作成功"
+
+msgid "Update JSON"
+msgstr "更新JSON"
+
+msgid "Update All Language"
+msgstr "更新所有語言"
+
+msgid "Download"
+msgstr "下載"
+
+msgid "Update"
+msgstr "更新"
+
+msgid "Enabled"
+msgstr "啟用"
+
+msgid "Disabled"
+msgstr "禁用"
+
+msgid "Action Failure, Please refresh the page and try again"
+msgstr "操作失敗，請刷新網頁後再試一次"
+
+msgid "Curl Error"
+msgstr "Curl錯誤"
+
+msgid "Update JSON Complete"
+msgstr "更新JSON 完成"
+
+msgid "Download/Update Complete"
+msgstr "下載/更新語言包 完成"
+
+msgid "Update All Language Complete"
+msgstr "更新所有語言 完畢"
+
+msgid "Success"
+msgstr "成功"
+
+msgid "Error"
+msgstr "錯誤"
+
+msgid "Your Browser language"
+msgstr "你的瀏覽器語言"
+
+msgid "Authors"
+msgstr "作者/團隊"
