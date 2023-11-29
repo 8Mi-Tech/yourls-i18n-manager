@@ -35,6 +35,12 @@ function i18n_manager_process_request(){
         ob_end_clean();  // 清空输出缓冲
         header('Content-Type: application/json');
 
+        function console_log($message, $level=null) {
+            echo <<<HTML
+             <script>console.log("{$message}");</script>
+HTML;
+        }
+
         function lang_rename_file($lang_code,$old_prefix, $new_prefix) {
             $languagesFolderPath = __DIR__.'/../../languages/';
             $sourceFile = $languagesFolderPath . $lang_code . '.' . $old_prefix;
@@ -42,34 +48,61 @@ function i18n_manager_process_request(){
             $success = rename($sourceFile, $targetFile);
             if ($success) {
                 // 文件重命名成功，返回成功的响应
-                $response = array('success' => true, 'message' => '处理成功', 'refresh' => true);
+                $response = array('success' => true, 'message' => yourls__( 'Action Success' ,'i18n_manager'), 'refresh' => true);
             } else {
                 // 文件重命名失败
-                $response = array('success' => false, 'message' => '文件重命名失败');
+                $response = array('success' => true, 'message' => yourls__( 'Action Failure, Please refresh the page and try again' ,'i18n_manager'));
             }
             echo json_encode($response);  // 输出 JSON 数据
             exit;  // 终止脚本执行，确保只返回 JSON 数据
         }
 
-        function _curl_getfile($type,$url){
+        function _curl_getfile($type,$url,$finename=null){
             $ch = curl_init();// 设置 cURL 选项,先初始化curl
-            curl_setopt( $ch, CURLOPT_URL, $data[ $_POST[ 'language_choice' ] ][ 'url' ] ); // 设置要下载的文件的 URL
-            curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 ); // 将响应保存到变量而不是直接输出
+            curl_setopt($ch, CURLOPT_URL, $url); // 设置要下载的文件的 URL
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1 ); // 将响应保存到变量而不是直接输出
+            curl_setopt($ch, CURLOPT_MAXREDIRS, 10);  // 设置最大重定向次数
+            curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);  // 启用重定向跟随
+            curl_setopt($ch, CURLOPT_AUTOREFERER, true);  // 设置为 true 以自动设置 Referer 头
+            
             $fileContent = curl_exec( $ch ); // 执行 cURL 请求并获取响应
             // 检查是否有错误发生
             if ( curl_errno( $ch ) ) {
-                echo 'Curl error: ' . curl_error( $ch );
+                    $response = array('success' => true, 'message' => yourls__( 'Curl Error' ,'i18n_manager').': '.curl_error( $ch ));
+            } else {
+                // 写到文件
+                if (empty($fileContent)) {
+                    $response = array('success' => true, 'message' => '文件内容为空');
+                } else {
+                    if ( $type === 'update-json') {
+                        $path = __DIR__.'/languages.json';
+                        $response = array('success' => true, 'message' => yourls__( 'Update JSON Complete' ,'i18n_manager'), "refresh" => true);
+                    }
+                    if ( $type === 'download') {
+                        $path_ =  __DIR__.'/../../languages/'.$finename;
+                        $path = $path_.'.mo';
+                        if (file_exists($path_ . '.disabled')) {
+                            unlink($path_ . '.disabled');
+                        }
+                        $response = array('success' => true, 'message' => yourls__( 'Download/Update Complete' ,'i18n_manager'), "refresh" => true);
+                    }
+                    file_put_contents( $path, $fileContent );
+                }
             }
+            #console_log(var_dump(curl_getinfo($ch)));
             curl_close( $ch ); // 关闭 cURL 资源
-            if ( $type === 'update-json') {
-                $path = __DIR__;
-            }
-            if ( $type === 'download') {
-                $path =  __DIR__.'/../../languages/';
-            }
-            // 写到文件
-            file_put_contents( $path, $fileContent );
+            return $response;
         }
+
+        function findDownloadUrl($json, $name) {
+            foreach ($json as $item) {
+                if ($item['code'] == $name) {
+                    return $item['url'];
+                }
+            }
+            return null; // 如果找不到对应的下载地址
+        }
+
         if (isset($_POST['enabled'])) {
             lang_rename_file($_POST['enabled'],'disabled', 'mo');
         }
@@ -79,7 +112,31 @@ function i18n_manager_process_request(){
         }
         
         if ( isset( $_POST[ 'download' ] ) ) {
-            _curl_getfile('download', $_POST[ 'download']);
+            if ( $_POST[ 'download' ] === 'update-all')  {
+                $languagesFolderPath = __DIR__.'/../../languages/'; // 语言文件夹
+                $files = scandir($languagesFolderPath); // 类似Linux的ls 但是他是数组类型
+                $json_languages = json_decode( file_get_contents( dirname( __FILE__ ).'/languages.json' ), true );
+                $count_success=0;
+                $count_failure=0;
+                foreach ($files as $file) {
+                    if ($file != '.' && $file != '..') { // 排除当前目录（.）和上级目录（..）
+                        $fileInfo = pathinfo($file); // 使用pathinfo函数获取文件信息
+                        if ($fileInfo['extension'] == 'mo') { // 检查文件后缀是否为 ".mo"
+                            // echo $fileInfo['filename']; // 输出去除后缀的文件名
+                            if (_curl_getfile('download',findDownloadUrl($json_languages,$fileInfo['filename']),$fileInfo['filename'])['success']){
+                                $count_success++;
+                            } else {
+                                $count_failure++;
+                            }
+                        }
+                    }
+                }
+                echo json_encode(array('success' => true, 'message' => yourls__( 'Update All Language Complete' ,'i18n_manager').', '.yourls__( 'Success' ,'i18n_manager').': '.$count_success.' '.yourls__( 'Error' ,'i18n_manager').': '.$count_failure, "refresh" => true));
+            } else {
+                echo json_encode(_curl_getfile('download', $_POST[ 'url'], $_POST['download']));  // 输出 JSON 数据
+            }
+            exit;  // 终止脚本执行，确保只返回 JSON 数据
+            
         }
 
         if ( isset( $_POST[ 'update-json' ] )){
@@ -161,7 +218,7 @@ function i18n_manager_html() {
     <td>
     {$lang_ac}
     <form method="post" class="inline-form"><input type = 'hidden' name = 'nonce' value = "$nonce" /><input type = 'hidden' name = 'update-json' value = 'true'><input type = 'submit' value = '{$lang_update_json}' class = 'button' /></form>
-    <form method="post" class="inline-form"><input type = 'hidden' name = 'nonce' value = "$nonce" /><input type = 'hidden' name = 'download' value = 'all'><input type = 'submit' value = '{$lang_update_all_lang}' class = 'button' /></form>
+    <form method="post" class="inline-form"><input type = 'hidden' name = 'nonce' value = "$nonce" /><input type = 'hidden' name = 'download' value = 'update-all'><input type = 'submit' value = '{$lang_update_all_lang}' class = 'button' /></form>
     </td>
     </tr>
 HTML;

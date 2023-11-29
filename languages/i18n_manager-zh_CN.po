@@ -36,3 +36,24 @@ msgstr "启动"
 
 msgid "Disabled"
 msgstr "禁用"
+
+msgid "Action Failure, Please refresh the page and try again"
+msgstr "操作失败，请刷新网页后再试一次"
+
+msgid "Curl Error"
+msgstr "Curl错误"
+
+msgid "Update JSON Complete"
+msgstr "更新JSON 完成"
+
+msgid "Download/Update Complete"
+msgstr "下载/更新语言包 完成"
+
+msgid "Update All Language Complete"
+msgstr "更新所有语言 完毕"
+
+msgid "Success"
+msgstr "成功"
+
+msgid "Error"
+msgstr "错误"
