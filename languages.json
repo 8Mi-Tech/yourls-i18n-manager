@@ -28,7 +28,7 @@
         "repo-url":"https://github.com/kralizeck/YOURLS-es_ES"
     },
     {
-        "code":"tr_TR",
+        "code":"tr",
         "nickname": "Türkçe",
         "url":"https://github.com/cgdgsg22/YOURLS_TR/raw/master/tr_TR.mo",
         "author":"cgdgsg22",
