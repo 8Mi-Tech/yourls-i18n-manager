@@ -166,6 +166,7 @@ function i18n_manager_html() {
     }
     $lang_lc=yourls__( 'Language Code', 'i18n_manager' );
     $lang_ln=yourls__( 'Language Name', 'i18n_manager' );
+    $lang_author=yourls__( 'Author', 'i18n_manager' );
     $lang_ac=yourls__( 'Action', 'i18n_manager' );
     $lang_update_json=yourls__( 'Update JSON', 'i18n_manager');
     $lang_update_all_lang=yourls__( 'Update All Language', 'i18n_manager');
@@ -212,6 +213,7 @@ function i18n_manager_html() {
     <tr>
     <th>{$lang_lc}</th>
     <th>{$lang_ln}</th>
+    <th>{$lang_author}</th>
     <td>
     {$lang_ac}
     <form method="post" class="inline-form"><input type = 'hidden' name = 'nonce' value = "$nonce" /><input type = 'hidden' name = 'update-json' value = 'true'><input type = 'submit' value = '{$lang_update_json}' class = 'button' /></form>
@@ -224,21 +226,21 @@ HTML;
     foreach ($languages as $language) {
         $languageCode = $language['code'];
         $languageName = $language['nickname'];
-    
+        $languageAuthor = $language['author'];
+        $languageRepoURL = $language['repo-url'];
         // 获取插件文件所在的目录
         $pluginDirectory = __DIR__;
-    
         // 构建文件路径
         $moFilePath = $pluginDirectory . '/../../languages/' . "$languageCode.mo";
         $disableFilePath = $pluginDirectory . '/../../languages/' . "$languageCode.disabled";
-    
+        // 输出页面
         echo <<<HTML
         <tr>
         <td>{$languageCode}</td>
         <td>{$languageName}</td>
+        <td><a target="_blank" href="{$languageRepoURL}">{$languageAuthor}</a></td>
         <td>
 HTML;
-    
         // 判断文件是否存在并输出对应的表单
         if (!file_exists($moFilePath) && !file_exists($disableFilePath)) {
             echo generateForm('download', $language['code'], yourls__( 'Download', 'i18n_manager' ), $nonce, $language['url']);
