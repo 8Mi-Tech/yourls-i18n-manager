@@ -57,7 +57,8 @@ HTML;
            
         }
 
-        function _curl_getfile($type,$url,$finename=null){
+        function _curl_getfile($type,$url,$finename=null,$aliases=null){
+            $languagesFolderPath = __DIR__.'/../../languages/';
             $ch = curl_init();// 设置 cURL 选项,先初始化curl
             curl_setopt($ch, CURLOPT_URL, $url); // 设置要下载的文件的 URL
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1 ); // 将响应保存到变量而不是直接输出
@@ -67,23 +68,32 @@ HTML;
             $fileContent = curl_exec( $ch ); // 执行 cURL 请求并获取响应
             // 检查是否有错误发生
             if ( curl_errno( $ch ) ) {
-                    $response = array('success' => true, 'message' => yourls__( 'Curl Error' ,'i18n_manager').': '.curl_error( $ch ));
+                    $response = array('success' => true, "result" => false, 'message' => yourls__( 'Curl Error' ,'i18n_manager').': '.curl_error( $ch ));
             } else {
                 // 写到文件
                 if (empty($fileContent)) {
-                    $response = array('success' => true, 'message' => '文件内容为空');
+                    $response = array('success' => true, "result" => false, 'message' => '文件内容为空');
                 } else {
                     if ( $type === 'update-json') {
                         $path = __DIR__.'/languages.json';
-                        $response = array('success' => true, 'message' => yourls__( 'Update JSON Complete' ,'i18n_manager'), "refresh" => true);
+                        $response = array('success' => true, "result" => true, 'message' => yourls__( 'Update JSON Complete' ,'i18n_manager'), "refresh" => true);
                     }
                     if ( $type === 'download') {
-                        $path_ =  __DIR__.'/../../languages/'.$finename;
+                        $path_ = $languagesFolderPath.$finename;
                         $path = $path_.'.mo';
                         if (file_exists($path_ . '.disabled')) {
                             unlink($path_ . '.disabled');
                         }
-                        $response = array('success' => true, 'message' => yourls__( 'Download/Update Complete' ,'i18n_manager'), "refresh" => true);
+                        if ($aliases!==null) {
+                            $originalDir = getcwd();
+                            if (chdir($languagesFolderPath)) {
+                                foreach ($aliases as $alias){
+                                    symlink($finename.'.mo', $alias.'.mo');
+                                }
+                                chdir($originalDir);
+                            }    
+                        }
+                        $response = array('success' => true,  "result" => true,  'message' => yourls__( 'Download/Update Complete' ,'i18n_manager'), "refresh" => true);
                     }
                     file_put_contents( $path, $fileContent );
                 }
@@ -93,10 +103,10 @@ HTML;
             return $response;
         }
 
-        function findDownloadUrl($json, $name) {
-            foreach ($json as $item) {
+        function findJSON($jsonData, $name, $string) {
+            foreach ($jsonData as $item) {
                 if ($item['code'] == $name) {
-                    return $item['url'];
+                    return $item[$string];
                 }
             }
             return null; // 如果找不到对应的下载地址
@@ -111,10 +121,10 @@ HTML;
         }
         
         if ( isset( $_POST[ 'download' ] ) ) {
+            $json_languages = json_decode( file_get_contents( dirname( __FILE__ ).'/languages.json' ), true );
             if ( $_POST[ 'download' ] === 'update-all')  {
                 $languagesFolderPath = __DIR__.'/../../languages/'; // 语言文件夹
                 $files = scandir($languagesFolderPath); // 类似Linux的ls 但是他是数组类型
-                $json_languages = json_decode( file_get_contents( dirname( __FILE__ ).'/languages.json' ), true );
                 $count_success=0;
                 $count_failure=0;
                 foreach ($files as $file) {
@@ -122,7 +132,7 @@ HTML;
                         $fileInfo = pathinfo($file); // 使用pathinfo函数获取文件信息
                         if ($fileInfo['extension'] == 'mo') { // 检查文件后缀是否为 ".mo"
                             // echo $fileInfo['filename']; // 输出去除后缀的文件名
-                            if (_curl_getfile('download',findDownloadUrl($json_languages,$fileInfo['filename']),$fileInfo['filename'])['success']){
+                            if (_curl_getfile('download',findJSON($json_languages,$fileInfo['filename'],'url'),$fileInfo['filename'],findJSON($json_languages,$fileInfo['filename'],'aliases'))['result']){
                                 $count_success++;
                             } else {
                                 $count_failure++;
@@ -132,7 +142,7 @@ HTML;
                 }
                 echo json_encode(array('success' => true, 'message' => yourls__( 'Update All Language Complete' ,'i18n_manager').', '.yourls__( 'Success' ,'i18n_manager').': '.$count_success.' '.yourls__( 'Error' ,'i18n_manager').': '.$count_failure, "refresh" => true));
             } else {
-                echo json_encode(_curl_getfile('download', $_POST[ 'url'], $_POST['download']));  // 输出 JSON 数据
+                echo json_encode(_curl_getfile('download', findJSON($json_languages,$_POST['download'],'url'), $_POST['download'],findJSON($json_languages,$_POST['download'],'aliases')));  // 输出 JSON 数据
             }            
         }
 
@@ -155,9 +165,7 @@ function i18n_manager_html() {
         $Field = '<input type="hidden" name="nonce" value="' . $nonce . '" />';
         $Field .= '<input type="hidden" name="' . $name . '" value="' . $lang . '" />';
         if ($name === 'download') {
-            if ($url !== '') {
-                $Field .= '<input type="hidden" name="url" value="' . $url . '" />';
-            } else {
+            if ($url === '') {
                 return '';
             }
         }
@@ -232,7 +240,8 @@ HTML;
         $pluginDirectory = __DIR__;
         // 构建文件路径
         $moFilePath = $pluginDirectory . '/../../languages/' . "$languageCode.mo";
-        $disableFilePath = $pluginDirectory . '/../../languages/' . "$languageCode.disabled";
+        $disableFilePath = $pluginDirectory . '/../../languages/' . "}
+        ?>$languageCode.disabled";
         // 输出页面
         echo <<<HTML
         <tr>
