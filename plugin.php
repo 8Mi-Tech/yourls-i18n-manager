@@ -240,8 +240,7 @@ HTML;
         $pluginDirectory = __DIR__;
         // 构建文件路径
         $moFilePath = $pluginDirectory . '/../../languages/' . "$languageCode.mo";
-        $disableFilePath = $pluginDirectory . '/../../languages/' . "}
-        ?>$languageCode.disabled";
+        $disableFilePath = $pluginDirectory . '/../../languages/' . "$languageCode.disabled";
         // 输出页面
         echo <<<HTML
         <tr>
