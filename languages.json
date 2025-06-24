@@ -1,70 +1,304 @@
 [
-    {
-        "code": "zh_CN",
-        "nickname": "简体中文",
-        "aliases": [
-            "zh",
-            "zh-CN"
-        ],
-        "url": "https://github.com/taozhiyu/yourls-translation-zh_CN/raw/main/zh_CN.mo",
-        "author": "taozhiyu",
-        "repo-url": "https://github.com/taozhiyu/yourls-translation-zh_CN"
-    },
-    {
-        "code": "zh_TW",
-        "nickname": "繁體中文",
-        "aliases": [
-            "zh-TW"
-        ],
-        "url": "https://github.com/alexclassroom/YOURLS-zh_TW/raw/main/zh_TW.mo",
-        "author": "alexclassroom",
-        "repo-url": "https://github.com/alexclassroom/YOURLS-zh_TW"
-    },
-    {
-        "code": "ru_RU",
-        "aliases": [
-            "ru"
-        ],
-        "nickname": "Русский",
-        "url": "https://github.com/nsauk/YOURLS-ru_RU/raw/master/ru_RU.mo",
-        "author": "nsauk",
-        "repo-url": "https://github.com/nsauk/YOURLS-ru_RU"
-    },
-    {
-        "code": "es_ES",
-        "aliases": [
-            "es"
-        ],
-        "nickname": "español",
-        "url": "https://github.com/kralizeck/YOURLS-es_ES/raw/master/es_ES.mo",
-        "author": "kralizeck",
-        "repo-url": "https://github.com/kralizeck/YOURLS-es_ES"
-    },
-    {
-        "code": "tr_TR",
-        "aliases": [
-            "tr"
-        ],
-        "nickname": "Türkçe",
-        "url": "https://github.com/cgdgsg22/YOURLS_TR/raw/master/tr_TR.mo",
-        "author": "cgdgsg22",
-        "repo-url": "https://github.com/cgdgsg22/YOURLS_TR"
-    },
-    {
-        "code": "uk",
-        "nickname": "українська",
-        "url": "https://github.com/pekarskyi/YOURLS-uk/raw/master/uk.mo",
-        "author": "pekarskyi",
-        "repo-url": "https://github.com/pekarskyi/YOURLS-uk"
-    },
-    {
-        "code": "en_US",
-        "aliases": [
-            "en"
-        ],
-        "nickname": "English (US)",
-        "url": "",
-        "author": "YOURLS Team",
-        "repo-url": "https://github.com/YOURLS/awesome"
-    }
+  {
+    "code": "en_US",
+    "aliases": [
+      "en"
+    ],
+    "nickname": "English (US)",
+    "url": "",
+    "author": "YOURLS Team",
+    "repo-url": "https://github.com/YOURLS/awesome"
+  },
+  {
+    "code": "zh_CN",
+    "nickname": "简体中文",
+    "aliases": [
+      "zh",
+      "zh-CN"
+    ],
+    "url": "https://github.com/taozhiyu/yourls-translation-zh_CN/raw/main/zh_CN.mo",
+    "author": "taozhiyu",
+    "repo-url": "https://github.com/taozhiyu/yourls-translation-zh_CN"
+  },
+  {
+    "code": "zh_TW",
+    "nickname": "繁體中文",
+    "aliases": [
+      "zh-TW"
+    ],
+    "url": "https://github.com/alexclassroom/YOURLS-zh_TW/raw/main/zh_TW.mo",
+    "author": "alexclassroom",
+    "repo-url": "https://github.com/alexclassroom/YOURLS-zh_TW"
+  },
+  {
+    "code": "bg_BG",
+    "nickname": "Bulgarian",
+    "aliases": [
+      "bg",
+      "bg-bg"
+    ],
+    "url": "https://github.com/VoodooServ/YOURLS-bg_BG/raw/master/bg_BG.mo",
+    "author": "VoodooServ",
+    "repo-url": "https://github.com/VoodooServ/YOURLS-bg_BG"
+  },
+  {
+    "code": "ca_ES",
+    "nickname": "Catalan",
+    "aliases": [
+      "ca",
+      "ca-es"
+    ],
+    "url": "https://github.com/kuratowsky/YOURLS-ca_ES/raw/master/ca_ES.mo",
+    "author": "kuratowsky",
+    "repo-url": "https://github.com/kuratowsky/YOURLS-ca_ES"
+  },
+  {
+    "code": "cs_CZ",
+    "nickname": "Czech",
+    "aliases": [
+      "cs",
+      "cs-cz"
+    ],
+    "url": "https://github.com/KubaCZ721/YOURLS-cs_CZ/raw/master/cs_CZ.mo",
+    "author": "KubaCZ721",
+    "repo-url": "https://github.com/KubaCZ721/YOURLS-cs_CZ"
+  },
+  {
+    "code": "da_DK",
+    "nickname": "Danish",
+    "aliases": [
+      "da",
+      "da-dk"
+    ],
+    "url": "https://github.com/jensz12/YOURLSDK/raw/master/da_DK.mo",
+    "author": "jensz12",
+    "repo-url": "https://github.com/jensz12/YOURLSDK"
+  },
+  {
+    "code": "de_DE",
+    "nickname": "German",
+    "aliases": [
+      "de",
+      "de-de"
+    ],
+    "url": "https://github.com/DerSev/YOURLS-de_DE/raw/master/de_DE.mo",
+    "author": "DerSev",
+    "repo-url": "https://github.com/DerSev/YOURLS-de_DE"
+  },
+  {
+    "code": "en_AU",
+    "nickname": "English (Australian)",
+    "aliases": [
+      "en",
+      "en-au"
+    ],
+    "url": "https://github.com/bakkbone/yourls-en_AU/raw/master/en_AU.mo",
+    "author": "bakkbone",
+    "repo-url": "https://github.com/bakkbone/yourls-en_AU"
+  },
+  {
+    "code": "es_ES",
+    "aliases": [
+      "es"
+    ],
+    "nickname": "español",
+    "url": "https://github.com/kralizeck/YOURLS-es_ES/raw/master/es_ES.mo",
+    "author": "kralizeck",
+    "repo-url": "https://github.com/kralizeck/YOURLS-es_ES"
+  },
+  {
+    "code": "fa_FA",
+    "nickname": "Farsi",
+    "aliases": [
+      "fa",
+      "fa-fa"
+    ],
+    "url": "https://github.com/saahmadnejad/YOURLS-fa_FA/raw/master/fa_FA.mo",
+    "author": "saahmadnejad",
+    "repo-url": "https://github.com/saahmadnejad/YOURLS-fa_FA"
+  },
+  {
+    "code": "fi_FI",
+    "nickname": "Finnish",
+    "aliases": [
+      "fi",
+      "fi-fi"
+    ],
+    "url": "https://github.com/re2man/YOURLS-fi_FI/raw/master/fi_FI.mo",
+    "author": "re2man",
+    "repo-url": "https://github.com/re2man/YOURLS-fi_FI"
+  },
+  {
+    "code": "fr_FR",
+    "nickname": "French",
+    "aliases": [
+      "fr",
+      "fr-fr"
+    ],
+    "url": "https://github.com/ozh/YOURLS-fr_FR/raw/master/fr_FR.mo",
+    "author": "ozh",
+    "repo-url": "https://github.com/ozh/YOURLS-fr_FR"
+  },
+  {
+    "code": "hi_IN",
+    "nickname": "Hindi",
+    "aliases": [
+      "hi",
+      "hi-in"
+    ],
+    "url": "https://github.com/itsKV/YOURLS-Hindi-translation/raw/master/hi_IN.mo",
+    "author": "itsKV",
+    "repo-url": "https://github.com/itsKV/YOURLS-Hindi-translation"
+  },
+  {
+    "code": "id_ID",
+    "nickname": "Indonesian",
+    "aliases": [
+      "id",
+      "id-id"
+    ],
+    "url": "https://github.com/tigefa4u/YOURLS-id_ID-Translations/raw/master/id_ID.mo",
+    "author": "tigefa4u",
+    "repo-url": "https://github.com/tigefa4u/YOURLS-id_ID-Translations"
+  },
+  {
+    "code": "it_IT",
+    "nickname": "Italian",
+    "aliases": [
+      "it",
+      "it-it"
+    ],
+    "url": "https://github.com/ggardin/YOURLS-it_IT/raw/master/it_IT.mo",
+    "author": "ggardin",
+    "repo-url": "https://github.com/ggardin/YOURLS-it_IT"
+  },
+  {
+    "code": "ja_JP",
+    "nickname": "Japanese",
+    "aliases": [
+      "ja",
+      "ja-jp"
+    ],
+    "url": "https://github.com/havill/YOURLS-ja_JP/raw/master/ja_JP.mo",
+    "author": "havill",
+    "repo-url": "https://github.com/havill/YOURLS-ja_JP"
+  },
+  {
+    "code": "ko_KR",
+    "nickname": "Korean",
+    "aliases": [
+      "ko",
+      "ko-kr"
+    ],
+    "url": "https://github.com/at4am/YOURLS-ko_KR/raw/master/ko_KR.mo",
+    "author": "at4am",
+    "repo-url": "https://github.com/at4am/YOURLS-ko_KR"
+  },
+  {
+    "code": "nb_NO",
+    "nickname": "Norwegian (Bokmål)",
+    "aliases": [
+      "nb",
+      "nb-no"
+    ],
+    "url": "https://github.com/geirawsm/YOURLS-nb_NO/raw/master/nb_NO.mo",
+    "author": "geirawsm",
+    "repo-url": "https://github.com/geirawsm/YOURLS-nb_NO"
+  },
+  {
+    "code": "nl_NL",
+    "nickname": "Dutch",
+    "aliases": [
+      "nl",
+      "nl-nl"
+    ],
+    "url": "https://github.com/toineenzo/YOURLS-nl_NL/raw/master/nl_NL.mo",
+    "author": "toineenzo",
+    "repo-url": "https://github.com/toineenzo/YOURLS-nl_NL"
+  },
+  {
+    "code": "pl_PL",
+    "nickname": "Polish",
+    "aliases": [
+      "pl",
+      "pl-pl"
+    ],
+    "url": "https://github.com/tomslominski/YOURLS-pl_PL/raw/master/pl_PL.mo",
+    "author": "tomslominski",
+    "repo-url": "https://github.com/tomslominski/YOURLS-pl_PL"
+  },
+  {
+    "code": "pt_BR",
+    "nickname": "Portuguese (Brazil)",
+    "aliases": [
+      "pt",
+      "pt-br"
+    ],
+    "url": "https://github.com/didi3d/YOURLS-pt_BR/raw/master/pt_BR.mo",
+    "author": "didi3d",
+    "repo-url": "https://github.com/didi3d/YOURLS-pt_BR"
+  },
+  {
+    "code": "pt_PT",
+    "nickname": "Portuguese (Portugal)",
+    "aliases": [
+      "pt",
+      "pt-pt"
+    ],
+    "url": "https://github.com/oscarmarcelo/YOURLS-pt_PT/raw/master/pt_PT.mo",
+    "author": "oscarmarcelo",
+    "repo-url": "https://github.com/oscarmarcelo/YOURLS-pt_PT"
+  },
+  {
+    "code": "ru_RU",
+    "aliases": [
+      "ru"
+    ],
+    "nickname": "Русский",
+    "url": "https://github.com/nsauk/YOURLS-ru_RU/raw/master/ru_RU.mo",
+    "author": "nsauk",
+    "repo-url": "https://github.com/nsauk/YOURLS-ru_RU"
+  },
+  {
+    "code": "sk_SK",
+    "nickname": "Slovak",
+    "aliases": [
+      "sk",
+      "sk-sk"
+    ],
+    "url": "https://github.com/filyph/YOURLS-sk_SK/raw/master/sk_SK.mo",
+    "author": "filyph",
+    "repo-url": "https://github.com/filyph/YOURLS-sk_SK"
+  },
+  {
+    "code": "te_IN",
+    "nickname": "Telugu",
+    "aliases": [
+      "te",
+      "te-in"
+    ],
+    "url": "https://github.com/kalyan-gupta/YOURLS_Telugu_Translation/raw/master/te_IN.mo",
+    "author": "kalyan-gupta",
+    "repo-url": "https://github.com/kalyan-gupta/YOURLS_Telugu_Translation"
+  },
+  {
+    "code": "tr_TR",
+    "aliases": [
+      "tr"
+    ],
+    "nickname": "Türkçe",
+    "url": "https://github.com/cgdgsg22/YOURLS_TR/raw/master/tr_TR.mo",
+    "author": "cgdgsg22",
+    "repo-url": "https://github.com/cgdgsg22/YOURLS_TR"
+  },
+  {
+    "code": "uk",
+    "nickname": "українська",
+    "aliases": [
+      "uk"
+    ],
+    "url": "https://github.com/pekarskyi/YOURLS-uk/raw/master/uk.mo",
+    "author": "pekarskyi",
+    "repo-url": "https://github.com/pekarskyi/YOURLS-uk"
+  }
 ]
