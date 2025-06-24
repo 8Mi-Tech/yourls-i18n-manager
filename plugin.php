@@ -10,22 +10,38 @@ Author URI: https://8mi.ink
 
 if ( !defined( 'YOURLS_ABSPATH' ) ) die(); // 这是必须的
 
-// 加载自身语言包
-yourls_add_action( 'plugins_loaded', 'i18n_manager_load_textdomain' );
-function i18n_manager_load_textdomain() {
-    yourls_load_custom_textdomain( 'i18n_manager', dirname( __FILE__ ) . '/languages' );
+yourls_add_action( 'plugins_loaded', 'i18n_manager_set_language' );
+function i18n_manager_set_language(){
+    global $yourls_locale;
+    $browserLang = current(explode(',', isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : ''));
+    $json_languages = json_decode( file_get_contents( dirname( __FILE__ ).'/languages.json' ), true );
+    foreach ($json_languages as $json_language) {
+        if (in_array($browserLang, $json_language['aliases'])) {
+            $matchedCode = $json_language['code'];
+            break;
+        }
+    }
+    $langFilePath = YOURLS_ABSPATH . '/user/languages/' . $matchedCode . '.mo';
+    if (file_exists($langFilePath) && is_readable($langFilePath) && (!is_link($langFilePath) || (is_readable(readlink($langFilePath)) && filesize($langFilePath) > 60))) {                
+        // TODO: Here, logic for checking the ".mo" language file needs to be inserted.
+        $yourls_locale = is_link( $langFilePath ) ? pathinfo( readlink( $langFilePath ) )[ 'filename' ] : $matchedCode;
+    }
+    if (!isset($yourls_locale) or $yourls_locale === '' ) {
+        $yourls_locale = 'en_US';
+    }
+    define( 'YOURLS_LANG', $yourls_locale);
+    return $yourls_locale;
 }
 
 // 添加设置页面
-yourls_add_action( 'plugins_loaded', 'i18n_manager_addpage' );
-function i18n_manager_addpage() {
-    // 检查请求方法是否为 POST
-    if ( $_SERVER[ 'REQUEST_METHOD' ] === 'POST' && $_SERVER["QUERY_STRING"] === 'page=i18n-manager' ) {
-        // 如果是 POST 请求，执行插件逻辑
-        i18n_manager_process_request();
+yourls_add_action( 'plugins_loaded', 'i18n_manager_plugin_loaded' );
+function i18n_manager_plugin_loaded() {
+    // define( 'YOURLS_LANG', i18n_manager_set_language());
+    yourls_load_custom_textdomain( 'i18n_manager', dirname( __FILE__ ) . '/languages' ); // 加载自身语言包
+    if ( $_SERVER[ 'REQUEST_METHOD' ] === 'POST' && $_SERVER["QUERY_STRING"] === 'page=i18n-manager' ) { // 检查请求方法是否为 POST
+        i18n_manager_process_request(); // 如果是 POST 请求，执行插件逻辑
     } else {
-        // 如果不是 POST 请求，注册设置页面
-        yourls_register_plugin_page( 'i18n-manager', yourls__( 'I18N Manager' ,'i18n_manager'), 'i18n_manager_html' );
+        yourls_register_plugin_page( 'i18n-manager', yourls__( 'I18N Manager' ,'i18n_manager'), 'i18n_manager_html' ); // 如果不是 POST 请求，注册设置页面
     }
 }
 
@@ -34,12 +50,6 @@ function i18n_manager_process_request(){
         ob_start();  // 开始输出缓冲
         ob_end_clean();  // 清空输出缓冲
         header('Content-Type: application/json');
-
-        function console_log($message, $level=null) {
-            echo <<<HTML
-             <script>console.log("{$message}");</script>
-HTML;
-        }
 
         function lang_rename_file($lang_code,$old_prefix, $new_prefix) {
             $languagesFolderPath = __DIR__.'/../../languages/';
@@ -59,12 +69,15 @@ HTML;
 
         function _curl_getfile($type,$url,$finename=null,$aliases=null){
             $languagesFolderPath = __DIR__.'/../../languages/';
-            $ch = curl_init();// 设置 cURL 选项,先初始化curl
-            curl_setopt($ch, CURLOPT_URL, $url); // 设置要下载的文件的 URL
+            $ch = curl_init("$url");// 设置 cURL 选项,先初始化curl
+            // curl_setopt($ch, CURLOPT_URL, $url); // 设置要下载的文件的 URL
             curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1 ); // 将响应保存到变量而不是直接输出
             curl_setopt($ch, CURLOPT_MAXREDIRS, 10);  // 设置最大重定向次数
             curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);  // 启用重定向跟随
             curl_setopt($ch, CURLOPT_AUTOREFERER, true);  // 设置为 true 以自动设置 Referer 头
+            curl_setopt($ch, CURLOPT_USERAGENT, $_SERVER["user-agent"]);
+            #curl_setopt($ch, CURLOPT_REFERER,_REFERER_);
+            curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
             $fileContent = curl_exec( $ch ); // 执行 cURL 请求并获取响应
             // 检查是否有错误发生
             if ( curl_errno( $ch ) ) {
@@ -82,7 +95,7 @@ HTML;
                         $path_ = $languagesFolderPath.$finename;
                         $path = $path_.'.mo';
                         if (file_exists($path_ . '.disabled')) {
-                            unlink($path_ . '.disabled');
+                            $path = $path_ . '.disabled';
                         }
                         if ($aliases!==null) {
                             $originalDir = getcwd();
@@ -98,12 +111,18 @@ HTML;
                     file_put_contents( $path, $fileContent );
                 }
             }
-            #console_log(var_dump(curl_getinfo($ch)));
             curl_close( $ch ); // 关闭 cURL 资源
+            #console_log(var_dump(curl_getinfo($ch)));
+
+            
+            #if ($response === null or $response === '') { 
+                #$response = array('success' => true,  "result" => false,  'message' => yourls__( 'Unknown Error' ,'i18n_manager'));
+            #}
+            
             return $response;
         }
 
-        function findJSON($jsonData, $name, $string) {
+        function _findJSON($jsonData, $name, $string) {
             foreach ($jsonData as $item) {
                 if ($item['code'] == $name) {
                     return $item[$string];
@@ -130,9 +149,9 @@ HTML;
                 foreach ($files as $file) {
                     if ($file != '.' && $file != '..') { // 排除当前目录（.）和上级目录（..）
                         $fileInfo = pathinfo($file); // 使用pathinfo函数获取文件信息
-                        if ($fileInfo['extension'] == 'mo') { // 检查文件后缀是否为 ".mo"
+                        if ($fileInfo['extension'] == 'mo' and is_link($file) == false ) { // 检查文件后缀是否为 ".mo"
                             // echo $fileInfo['filename']; // 输出去除后缀的文件名
-                            if (_curl_getfile('download',findJSON($json_languages,$fileInfo['filename'],'url'),$fileInfo['filename'],findJSON($json_languages,$fileInfo['filename'],'aliases'))['result']){
+                            if (_curl_getfile('download',_findJSON($json_languages,$fileInfo['filename'],'url'),$fileInfo['filename'],_findJSON($json_languages,$fileInfo['filename'],'aliases'))['result']){
                                 $count_success++;
                             } else {
                                 $count_failure++;
@@ -142,7 +161,7 @@ HTML;
                 }
                 echo json_encode(array('success' => true, 'message' => yourls__( 'Update All Language Complete' ,'i18n_manager').', '.yourls__( 'Success' ,'i18n_manager').': '.$count_success.' '.yourls__( 'Error' ,'i18n_manager').': '.$count_failure, "refresh" => true));
             } else {
-                echo json_encode(_curl_getfile('download', findJSON($json_languages,$_POST['download'],'url'), $_POST['download'],findJSON($json_languages,$_POST['download'],'aliases')));  // 输出 JSON 数据
+                echo json_encode(_curl_getfile('download', _findJSON($json_languages,$_POST['download'],'url'), $_POST['download'],_findJSON($json_languages,$_POST['download'],'aliases')));  // 输出 JSON 数据
             }            
         }
 
@@ -181,6 +200,8 @@ function i18n_manager_html() {
     // 使用HEREDOC语法输出HTML表格
     echo <<<HTML
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/layui/layui@main/dist/layui.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/layui/layui@main/src/css/modules/layer.css">
     <script>
     $(document).ready(function() {
         $('.inline-form').submit(function(e) {
@@ -194,27 +215,47 @@ function i18n_manager_html() {
                 success: function(response) {
                     if (response.success) {
                         // 成功处理的操作，可以显示提示信息等
-                        alert(response.message);
-                        if (response.refresh) {
-                            location.reload();
-                        }
+                        layer.msg(response.message, {icon: 1}, function(){
+                            if (response.refresh) {
+                                location.reload();
+                            }
+                        });
                     } else {
                         // 处理失败的操作
-                        alert('处理失败');
+                         layer.msg(response.message, {icon: 2});
                     }
                 },
                 error: function() {
                     // 请求失败的操作
-                    alert('请求失败');
+                    layer.msg('请求失败', {icon: 5});
                 }
             });
         });
     });
     </script>   
     <style>
-    .inline-form {
-        display: inline;
-    }
+    .inline-form { display: inline; }
+    
+@font-face {
+  font-family: 'layui-icon';
+  src: url('https://cdn.jsdelivr.net/gh/layui/layui@main/dist/font/iconfont.eot');
+  src: url('https://cdn.jsdelivr.net/gh/layui/layui@main/dist/font/iconfont.eot') format('embedded-opentype'),
+       url('https://cdn.jsdelivr.net/gh/layui/layui@main/dist/font/iconfont.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/layui/layui@main/dist/font/iconfont.woff') format('woff'),
+       url('https://cdn.jsdelivr.net/gh/layui/layui@main/dist/font/iconfont.ttf') format('truetype'),
+       url('https://cdn.jsdelivr.net/gh/layui/layui@main/dist/font/iconfont.svg') format('svg');
+}
+
+.layui-icon{
+  font-family:"layui-icon" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+    .layui-icon-success:before{content:"✅"}
+    .layui-icon-error:before{content:"❌"}
+    .layui-icon-face-cry:before{content:"😭"}
     </style>
     <h2>{$title}</h2>
     <table class = 'form-table'>
@@ -264,11 +305,14 @@ HTML;
         
         echo '</td></tr>';
     }
-    $browserLang=yourls_get_locale();
+    $websiteLang=yourls_get_locale();
+    $browserLang = current(explode(',', isset($_SERVER['HTTP_ACCEPT_LANGUAGE']) ? $_SERVER['HTTP_ACCEPT_LANGUAGE'] : ''));
     $lang_tip_browserlang=yourls__( 'Your Browser language', 'i18n_manager' );
+    
     echo <<< HTML
     </table>
-    <p>{$lang_tip_browserlang}: {$browserLang}
+    <p>{$lang_tip_browserlang}: {$browserLang} </p>
+    <p>website: {$websiteLang}</p>
 HTML;
 }
 ?>
