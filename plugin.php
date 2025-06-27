@@ -3,7 +3,7 @@
 Plugin Name: I18N Manager Plugin
 Plugin URI: https://github.com/8Mi-Tech/yourls-i18n-manager
 Description: I18N Manager is a MultiLanguage System
-Version: 1.0
+Version: 1.1
 Author: 8Mi-Tech
 Author URI: https://8mi.ink
 */
